@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Copyright (c) 2026 Shane McDonald. All rights reserved. -->
-<!-- Version 1.1 -->
+<!-- Version 1.2 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -225,9 +225,12 @@
 
           <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-5">
             <!-- Super Binder Summary -->
-            <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-3">
-              <span class="text-slate-400">Super Binder (600-Pair):</span>
-              <span id="summary_super_binder" class="font-mono font-semibold text-slate-200">White</span>
+            <div class="space-y-2 border-b border-slate-800 pb-3">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">Super Binder (600-Pair):</span>
+                <span id="summary_super_binder" class="font-mono font-semibold text-slate-200">White</span>
+              </div>
+              <div id="preview_super_binder" class="w-full h-5 rounded-lg border border-slate-700 overflow-hidden shadow bg-white"></div>
             </div>
 
             <!-- Binder Ribbon Summary -->
@@ -339,6 +342,7 @@
 
     // Visual Summary Elements
     const summarySuperBinder = document.getElementById('summary_super_binder');
+    const previewSuperBinder = document.getElementById('preview_super_binder');
     const summaryBinder = document.getElementById('summary_binder');
     const summaryWire = document.getElementById('summary_wire');
     const previewBinderTip = document.getElementById('preview_binder_tip');
@@ -390,8 +394,10 @@
       const wtObj = TIP_COLORS[wtVal];
       const wrObj = RING_COLORS[wrVal];
 
-      // Text Summaries
-      summarySuperBinder.textContent = `${sbObj.name} (Super Binder ${sbVal + 1})`;
+      // Text Summaries & Color Bars
+      summarySuperBinder.textContent = sbObj.name;
+      previewSuperBinder.style.backgroundColor = sbObj.hex;
+
       summaryBinder.textContent = `${btObj.name} / ${brObj.name}`;
       summaryWire.textContent = `${wtObj.name} / ${wrObj.name}`;
 
