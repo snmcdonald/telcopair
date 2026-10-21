@@ -223,7 +223,13 @@
             <i class="fa-solid fa-eye text-blue-400"></i> Visual Summary
           </h2>
 
-          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-5">
+          <div id="visual_summary_content" class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-5">
+            <!-- Active Pair Number Summary -->
+            <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-3">
+              <span class="text-slate-400">Telco Pair Number:</span>
+              <span id="summary_pair_number" class="font-mono font-semibold text-blue-400">Pair 1</span>
+            </div>
+
             <!-- Super Binder Summary -->
             <div class="space-y-2 border-b border-slate-800 pb-3">
               <div class="flex items-center justify-between text-xs">
@@ -341,6 +347,8 @@
     const validationIcon = document.getElementById('validation_icon');
 
     // Visual Summary Elements
+    const visualSummaryContent = document.getElementById('visual_summary_content');
+    const summaryPairNumber = document.getElementById('summary_pair_number');
     const summarySuperBinder = document.getElementById('summary_super_binder');
     const previewSuperBinder = document.getElementById('preview_super_binder');
     const summaryBinder = document.getElementById('summary_binder');
@@ -381,7 +389,9 @@
     }
 
     // Helper: Render right-hand visual preview panel
-    function renderVisuals() {
+    function renderVisuals(pairNum) {
+      visualSummaryContent.classList.remove('hidden');
+
       const sbVal = parseInt(selectSuperBinder.value, 10);
       const btVal = parseInt(selectBinderTip.value, 10);
       const brVal = parseInt(selectBinderRing.value, 10);
@@ -395,6 +405,7 @@
       const wrObj = RING_COLORS[wrVal];
 
       // Text Summaries & Color Bars
+      summaryPairNumber.textContent = `Pair ${pairNum}`;
       summarySuperBinder.textContent = sbObj.name;
       previewSuperBinder.style.backgroundColor = sbObj.hex;
 
@@ -429,18 +440,21 @@
         showValidation("Please enter a valid numeric Telco Pair number.", "error");
         pairInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
         pairInput.classList.remove('border-slate-600');
+        visualSummaryContent.classList.add('hidden');
         isUpdating = false;
         return;
       } else if (pair < 1) {
         showValidation("Pair number must be at least 1.", "error");
         pairInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
         pairInput.classList.remove('border-slate-600');
+        visualSummaryContent.classList.add('hidden');
         isUpdating = false;
         return;
       } else if (pair > 6000) {
         showValidation("Pair number cannot exceed 6000.", "error");
         pairInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
         pairInput.classList.remove('border-slate-600');
+        visualSummaryContent.classList.add('hidden');
         isUpdating = false;
         return;
       } else {
@@ -472,7 +486,7 @@
       selectWireTip.value = wireTipIdx;
       selectWireRing.value = wireRingIdx;
 
-      renderVisuals();
+      renderVisuals(pair);
       isUpdating = false;
     }
 
@@ -486,6 +500,17 @@
       const binderRingIdx = parseInt(selectBinderRing.value, 10);
       const wireTipIdx = parseInt(selectWireTip.value, 10);
       const wireRingIdx = parseInt(selectWireRing.value, 10);
+
+      // Validation: Binder Tip cannot be Violet (index 4) and Binder Ring cannot be Slate (index 4)
+      if (binderTipIdx === 4 && binderRingIdx === 4) {
+        showValidation("Invalid Binder: Tip (Violet) and Ring (Slate) combination does not exist (max 24 binder groups per Super Binder).", "error");
+        pairInput.value = "";
+        pairInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
+        pairInput.classList.remove('border-slate-600');
+        visualSummaryContent.classList.add('hidden');
+        isUpdating = false;
+        return;
+      }
 
       // Pair inside 25-pair group (1 - 25)
       const pairIn25 = (wireTipIdx * 5) + wireRingIdx + 1;
@@ -503,7 +528,7 @@
       pairInput.classList.remove('border-red-500', 'ring-2', 'ring-red-500/20');
       pairInput.classList.add('border-slate-600');
 
-      renderVisuals();
+      renderVisuals(calculatedPair);
       isUpdating = false;
     }
 
