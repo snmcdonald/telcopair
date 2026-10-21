@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<!-- (C) Shane McDonald 2026 -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telco Color Code Calculator</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Option Color Styling for Options in Select Boxes */
+    option.opt-white  { background-color: #FFFFFF !important; color: #0F172A !important; }
+    option.opt-red    { background-color: #EF4444 !important; color: #FFFFFF !important; }
+    option.opt-black  { background-color: #1E293B !important; color: #FFFFFF !important; }
+    option.opt-yellow { background-color: #EAB308 !important; color: #0F172A !important; }
+    option.opt-violet { background-color: #A855F7 !important; color: #FFFFFF !important; }
+    option.opt-blue   { background-color: #3B82F6 !important; color: #FFFFFF !important; }
+    option.opt-orange { background-color: #F97316 !important; color: #FFFFFF !important; }
+    option.opt-green  { background-color: #22C55E !important; color: #FFFFFF !important; }
+    option.opt-brown  { background-color: #8B4513 !important; color: #FFFFFF !important; }
+    option.opt-slate  { background-color: #64748B !important; color: #FFFFFF !important; }
+
+    /* Custom select box styling to display active selected background color */
+    .colored-select {
+      font-weight: 600;
+      transition: all 0.2s ease-in-out;
+    }
+    
+    .bg-telco-white  { background-color: #FFFFFF !important; color: #0F172A !important; }
+    .bg-telco-red    { background-color: #EF4444 !important; color: #FFFFFF !important; }
+    .bg-telco-black  { background-color: #1E293B !important; color: #FFFFFF !important; }
+    .bg-telco-yellow { background-color: #EAB308 !important; color: #0F172A !important; }
+    .bg-telco-violet { background-color: #A855F7 !important; color: #FFFFFF !important; }
+    .bg-telco-blue   { background-color: #3B82F6 !important; color: #FFFFFF !important; }
+    .bg-telco-orange { background-color: #F97316 !important; color: #FFFFFF !important; }
+    .bg-telco-green  { background-color: #22C55E !important; color: #FFFFFF !important; }
+    .bg-telco-brown  { background-color: #8B4513 !important; color: #FFFFFF !important; }
+    .bg-telco-slate  { background-color: #64748B !important; color: #FFFFFF !important; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen py-8 px-4 flex flex-col justify-between">
+
+  <div class="max-w-4xl mx-auto w-full space-y-6">
+    <!-- Header -->
+    <header class="bg-slate-800/80 backdrop-blur border border-slate-700/60 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 text-2xl shadow-inner">
+          <i class="fa-solid fa-network-wired"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight text-white">Telco Color Code Calculator</h1>
+          <p class="text-xs text-slate-400">High-Count 25-Pair, Binder & Super Binder Standard Calculator</p>
+          <p class="text-xs text-slate-400">(c) Shane McDonald 2026</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 bg-slate-900/60 px-4 py-2 rounded-xl border border-slate-700/50">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-xs font-mono text-slate-300">Pairs 1 - 6000 Active</span>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column: Input and Selectors -->
+      <main class="lg:col-span-7 bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl space-y-6">
+        
+        <!-- Telco Pair Input Box -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label for="pair_number" class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+              <i class="fa-solid fa-hashtag text-blue-400"></i>Telco Number
+            </label>
+            <span class="text-xs font-mono text-slate-400">Range: 1 to 6000</span>
+          </div>
+          
+          <div class="relative">
+            <input 
+              type="number" 
+              id="pair_number" 
+              min="1" 
+              max="6000" 
+              value="1"
+              class="w-full bg-slate-900 border border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white text-xl font-mono-code font-bold rounded-xl px-4 py-3 outline-none transition-all"
+              placeholder="Enter Pair Number (1 - 6000)..."
+            />
+            <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-500 font-mono text-xs">
+              PAIR #
+            </div>
+          </div>
+
+          <!-- Real-Time Input Validation Feedback Message -->
+          <div id="validation_feedback" class="mt-2 text-xs font-medium flex items-center gap-1.5 hidden">
+            <i id="validation_icon" class="fa-solid fa-circle-exclamation"></i>
+            <span id="validation_text"></span>
+          </div>
+        </div>
+
+        <hr class="border-slate-700/80 my-4" />
+
+        <!-- 5 Dropdown Selectors -->
+        <div class="space-y-4">
+          <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+            <span>Color Dropdowns</span>
+            <span class="text-[11px] text-slate-500 font-normal"><i class="fa-solid fa-palette mr-1"></i>Colored Options</span>
+          </div>
+
+          <!-- 1st Dropdown: Super Binder -->
+          <div>
+            <label for="super_binder_color" class="block text-xs font-semibold text-slate-300 mb-1.5">
+              1. Super Binder
+            </label>
+            <select 
+              id="super_binder_color" 
+              class="colored-select w-full border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold outline-none cursor-pointer shadow-sm focus:ring-2 focus:ring-blue-500/30">
+              <option value="0" class="opt-white">White</option>
+              <option value="1" class="opt-red">Red</option>
+              <option value="2" class="opt-black">Black</option>
+              <option value="3" class="opt-yellow">Yellow</option>
+              <option value="4" class="opt-violet">Violet</option>
+              <option value="5" class="opt-blue">Blue</option>
+              <option value="6" class="opt-orange">Orange</option>
+              <option value="7" class="opt-green">Green</option>
+              <option value="8" class="opt-brown">Brown</option>
+              <option value="9" class="opt-slate">Slate</option>
+            </select>
+          </div>
+
+          <!-- Grid for 2nd & 3rd Dropdowns -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- 2nd Dropdown: Binder Tip -->
+            <div>
+              <label for="binder_tip_color" class="block text-xs font-semibold text-slate-300 mb-1.5">
+                2. Binder Tip
+              </label>
+              <select 
+                id="binder_tip_color" 
+                class="colored-select w-full border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold outline-none cursor-pointer shadow-sm focus:ring-2 focus:ring-blue-500/30">
+                <option value="0" class="opt-white">White</option>
+                <option value="1" class="opt-red">Red</option>
+                <option value="2" class="opt-black">Black</option>
+                <option value="3" class="opt-yellow">Yellow</option>
+                <option value="4" class="opt-violet">Violet</option>
+              </select>
+            </div>
+
+            <!-- 3rd Dropdown: Binder Ring -->
+            <div>
+              <label for="binder_ring_color" class="block text-xs font-semibold text-slate-300 mb-1.5">
+                3. Binder Ring
+              </label>
+              <select 
+                id="binder_ring_color" 
+                class="colored-select w-full border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold outline-none cursor-pointer shadow-sm focus:ring-2 focus:ring-blue-500/30">
+                <option value="0" class="opt-blue">Blue</option>
+                <option value="1" class="opt-orange">Orange</option>
+                <option value="2" class="opt-green">Green</option>
+                <option value="3" class="opt-brown">Brown</option>
+                <option value="4" class="opt-slate">Slate</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Grid for 4th & 5th Dropdowns -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- 4th Dropdown: Wire Tip -->
+            <div>
+              <label for="wire_tip_color" class="block text-xs font-semibold text-slate-300 mb-1.5">
+                4. Wire Tip
+              </label>
+              <select 
+                id="wire_tip_color" 
+                class="colored-select w-full border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold outline-none cursor-pointer shadow-sm focus:ring-2 focus:ring-blue-500/30">
+                <option value="0" class="opt-white">White</option>
+                <option value="1" class="opt-red">Red</option>
+                <option value="2" class="opt-black">Black</option>
+                <option value="3" class="opt-yellow">Yellow</option>
+                <option value="4" class="opt-violet">Violet</option>
+              </select>
+            </div>
+
+            <!-- 5th Dropdown: Wire Ring -->
+            <div>
+              <label for="wire_ring_color" class="block text-xs font-semibold text-slate-300 mb-1.5">
+                5. Wire Ring
+              </label>
+              <select 
+                id="wire_ring_color" 
+                class="colored-select w-full border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold outline-none cursor-pointer shadow-sm focus:ring-2 focus:ring-blue-500/30">
+                <option value="0" class="opt-blue">Blue</option>
+                <option value="1" class="opt-orange">Orange</option>
+                <option value="2" class="opt-green">Green</option>
+                <option value="3" class="opt-brown">Brown</option>
+                <option value="4" class="opt-slate">Slate</option>
+              </select>
+            </div>
+
+          </div>
+
+          <!-- Grid for 4th & 5th Dropdowns -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <!-- 4th Dropdown: Wire Tip -->
+            <div>
+              <label for="wire_tip_color" class="block text-xs font-semibold text-slate-300 mb-1.5">
+                4. Wire Tip
+              </label>
+              <select 
+                id="wire_tip_color" 
+                class="colored-select w-full border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold outline-none cursor-pointer shadow-sm focus:ring-2 focus:ring-blue-500/30">
+                <option value="0" class="opt-white">0 = White</option>
+                <option value="1" class="opt-red">1 = Red</option>
+                <option value="2" class="opt-black">2 = Black</option>
+                <option value="3" class="opt-yellow">3 = Yellow</option>
+                <option value="4" class="opt-violet">4 = Violet</option>
+              </select>
+            </div>
+
+            <!-- 5th Dropdown: Wire Ring -->
+            <div>
+              <label for="wire_ring_color" class="block text-xs font-semibold text-slate-300 mb-1.5">
+                5. Wire Ring
+              </label>
+              <select 
+                id="wire_ring_color" 
+                class="colored-select w-full border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold outline-none cursor-pointer shadow-sm focus:ring-2 focus:ring-blue-500/30">
+                <option value="0" class="opt-blue">0 = Blue</option>
+                <option value="1" class="opt-orange">1 = Orange</option>
+                <option value="2" class="opt-green">2 = Green</option>
+                <option value="3" class="opt-brown">3 = Brown</option>
+                <option value="4" class="opt-slate">4 = Slate</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+      </main>
+
+      <!-- Right Column: Visual Summary & Cable Simulation -->
+      <aside class="lg:col-span-5 bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl flex flex-col justify-between space-y-6">
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-eye text-blue-400"></i> Visual Summary
+          </h2>
+
+          <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-5 space-y-5">
+            <!-- Super Binder Summary -->
+            <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-3">
+              <span class="text-slate-400">Super Binder (600-Pair):</span>
+              <span id="summary_super_binder" class="font-mono font-semibold text-slate-200">White</span>
+            </div>
+
+            <!-- Binder Ribbon Summary -->
+            <div class="space-y-2 border-b border-slate-800 pb-3">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">Binder Ribbon (25-Pair):</span>
+                <span id="summary_binder" class="font-mono font-semibold text-slate-200">White / Blue</span>
+              </div>
+              <div class="w-full h-5 rounded-lg border border-slate-700 flex overflow-hidden shadow">
+                <div id="preview_binder_tip" class="w-1/2 h-full bg-white"></div>
+                <div id="preview_binder_ring" class="w-1/2 h-full bg-blue-500"></div>
+              </div>
+            </div>
+
+            <!-- Conductor Pair Wire Simulation -->
+            <div class="space-y-3 pt-1">
+              <div class="flex items-center justify-between text-xs">
+                <span class="text-slate-400">Wire Pair Conductors:</span>
+                <span id="summary_wire" class="font-mono font-semibold text-slate-200">White / Blue</span>
+              </div>
+
+              <div class="w-full bg-slate-900 rounded-xl p-3 border border-slate-800 space-y-2">
+                <!-- Tip Wire -->
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-mono text-slate-400 w-12">TIP:</span>
+                  <div class="flex-1 h-5 rounded-full border border-slate-700 overflow-hidden relative">
+                    <div id="render_wire_tip_bg" class="w-full h-full bg-white relative">
+                      <div id="render_wire_tip_stripe" class="absolute inset-0 opacity-50"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Ring Wire -->
+                <div class="flex items-center gap-2">
+                  <span class="text-[10px] font-mono text-slate-400 w-12">RING:</span>
+                  <div class="flex-1 h-5 rounded-full border border-slate-700 overflow-hidden relative">
+                    <div id="render_wire_ring_bg" class="w-full h-full bg-blue-500 relative">
+                      <div id="render_wire_ring_stripe" class="absolute inset-0 opacity-50"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Telecommunications Helper Note -->
+        <div class="bg-blue-950/30 border border-blue-900/50 rounded-xl p-4 text-xs text-slate-300 space-y-2">
+          <div class="font-semibold text-blue-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-info"></i> Color Mapping Info
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            Calculations strictly map 25 pairs per binder group and 24 binder groups (600 pairs) per super binder.
+          </p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <footer class="text-center text-xs text-slate-500 mt-8">
+    Telco Color Code Calculator & High-Count Pair Visualizer
+  </footer>
+
+  <script>
+    // Telecom Master Color Mapping Arrays
+    const TIP_COLORS = [
+      { name: "White", bgClass: "bg-telco-white", hex: "#FFFFFF" },
+      { name: "Red", bgClass: "bg-telco-red", hex: "#EF4444" },
+      { name: "Black", bgClass: "bg-telco-black", hex: "#1E293B" },
+      { name: "Yellow", bgClass: "bg-telco-yellow", hex: "#EAB308" },
+      { name: "Violet", bgClass: "bg-telco-violet", hex: "#A855F7" }
+    ];
+
+    const RING_COLORS = [
+      { name: "Blue", bgClass: "bg-telco-blue", hex: "#3B82F6" },
+      { name: "Orange", bgClass: "bg-telco-orange", hex: "#F97316" },
+      { name: "Green", bgClass: "bg-telco-green", hex: "#22C55E" },
+      { name: "Brown", bgClass: "bg-telco-brown", hex: "#8B4513" },
+      { name: "Slate", bgClass: "bg-telco-slate", hex: "#64748B" }
+    ];
+
+    const SUPER_BINDER_COLORS = [
+      { name: "White", bgClass: "bg-telco-white", hex: "#FFFFFF" },
+      { name: "Red", bgClass: "bg-telco-red", hex: "#EF4444" },
+      { name: "Black", bgClass: "bg-telco-black", hex: "#1E293B" },
+      { name: "Yellow", bgClass: "bg-telco-yellow", hex: "#EAB308" },
+      { name: "Violet", bgClass: "bg-telco-violet", hex: "#A855F7" },
+      { name: "Blue", bgClass: "bg-telco-blue", hex: "#3B82F6" },
+      { name: "Orange", bgClass: "bg-telco-orange", hex: "#F97316" },
+      { name: "Green", bgClass: "bg-telco-green", hex: "#22C55E" },
+      { name: "Brown", bgClass: "bg-telco-brown", hex: "#8B4513" },
+      { name: "Slate", bgClass: "bg-telco-slate", hex: "#64748B" }
+    ];
+
+    // DOM Elements
+    const pairInput = document.getElementById('pair_number');
+    const selectSuperBinder = document.getElementById('super_binder_color');
+    const selectBinderTip = document.getElementById('binder_tip_color');
+    const selectBinderRing = document.getElementById('binder_ring_color');
+    const selectWireTip = document.getElementById('wire_tip_color');
+    const selectWireRing = document.getElementById('wire_ring_color');
+
+    // Validation DOM Elements
+    const validationFeedback = document.getElementById('validation_feedback');
+    const validationText = document.getElementById('validation_text');
+    const validationIcon = document.getElementById('validation_icon');
+
+    // Visual Summary Elements
+    const summarySuperBinder = document.getElementById('summary_super_binder');
+    const summaryBinder = document.getElementById('summary_binder');
+    const summaryWire = document.getElementById('summary_wire');
+    const previewBinderTip = document.getElementById('preview_binder_tip');
+    const previewBinderRing = document.getElementById('preview_binder_ring');
+    const renderWireTipBg = document.getElementById('render_wire_tip_bg');
+    const renderWireTipStripe = document.getElementById('render_wire_tip_stripe');
+    const renderWireRingBg = document.getElementById('render_wire_ring_bg');
+    const renderWireRingStripe = document.getElementById('render_wire_ring_stripe');
+
+    let isUpdating = false;
+
+    // Helper: Apply selected option background styling to dropdown select elements
+    function applyDropdownStyles() {
+      const sbVal = parseInt(selectSuperBinder.value, 10);
+      const btVal = parseInt(selectBinderTip.value, 10);
+      const brVal = parseInt(selectBinderRing.value, 10);
+      const wtVal = parseInt(selectWireTip.value, 10);
+      const wrVal = parseInt(selectWireRing.value, 10);
+
+      // Clean old bg classes
+      const allBgClasses = [
+        'bg-telco-white', 'bg-telco-red', 'bg-telco-black', 'bg-telco-yellow', 'bg-telco-violet',
+        'bg-telco-blue', 'bg-telco-orange', 'bg-telco-green', 'bg-telco-brown', 'bg-telco-slate'
+      ];
+
+      [selectSuperBinder, selectBinderTip, selectBinderRing, selectWireTip, selectWireRing].forEach(el => {
+        el.classList.remove(...allBgClasses);
+      });
+
+      // Apply new active background class
+      selectSuperBinder.classList.add(SUPER_BINDER_COLORS[sbVal].bgClass);
+      selectBinderTip.classList.add(TIP_COLORS[btVal].bgClass);
+      selectBinderRing.classList.add(RING_COLORS[brVal].bgClass);
+      selectWireTip.classList.add(TIP_COLORS[wtVal].bgClass);
+      selectWireRing.classList.add(RING_COLORS[wrVal].bgClass);
+    }
+
+    // Helper: Render right-hand visual preview panel
+    function renderVisuals() {
+      const sbVal = parseInt(selectSuperBinder.value, 10);
+      const btVal = parseInt(selectBinderTip.value, 10);
+      const brVal = parseInt(selectBinderRing.value, 10);
+      const wtVal = parseInt(selectWireTip.value, 10);
+      const wrVal = parseInt(selectWireRing.value, 10);
+
+      const sbObj = SUPER_BINDER_COLORS[sbVal];
+      const btObj = TIP_COLORS[btVal];
+      const brObj = RING_COLORS[brVal];
+      const wtObj = TIP_COLORS[wtVal];
+      const wrObj = RING_COLORS[wrVal];
+
+      // Text Summaries
+      summarySuperBinder.textContent = `${sbObj.name} (Super Binder ${sbVal + 1})`;
+      summaryBinder.textContent = `${btObj.name} / ${brObj.name}`;
+      summaryWire.textContent = `${wtObj.name} / ${wrObj.name}`;
+
+      // Binder Ribbon Preview
+      previewBinderTip.style.backgroundColor = btObj.hex;
+      previewBinderRing.style.backgroundColor = brObj.hex;
+
+      // Wire Conductors Simulation
+      renderWireTipBg.style.backgroundColor = wtObj.hex;
+      renderWireTipStripe.style.background = `repeating-linear-gradient(45deg, transparent, transparent 8px, ${wrObj.hex} 8px, ${wrObj.hex} 14px)`;
+
+      renderWireRingBg.style.backgroundColor = wrObj.hex;
+      renderWireRingStripe.style.background = `repeating-linear-gradient(45deg, transparent, transparent 8px, ${wtObj.hex} 8px, ${wtObj.hex} 14px)`;
+
+      // Apply dropdown colors
+      applyDropdownStyles();
+    }
+
+    // Function 1: Handle Pair Number Input Change (Calculates 5 Dropdowns)
+    function handlePairNumberInput() {
+      if (isUpdating) return;
+      isUpdating = true;
+
+      const rawVal = pairInput.value.trim();
+      const pair = parseInt(rawVal, 10);
+
+      // Validation Bounds Check (Must be between 1 and 6000)
+      if (rawVal === "" || isNaN(pair)) {
+        showValidation("Please enter a valid numeric Telco Pair number.", "error");
+        pairInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
+        pairInput.classList.remove('border-slate-600');
+        isUpdating = false;
+        return;
+      } else if (pair < 1) {
+        showValidation("Pair number must be at least 1.", "error");
+        pairInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
+        pairInput.classList.remove('border-slate-600');
+        isUpdating = false;
+        return;
+      } else if (pair > 6000) {
+        showValidation("Pair number cannot exceed 6000.", "error");
+        pairInput.classList.add('border-red-500', 'ring-2', 'ring-red-500/20');
+        pairInput.classList.remove('border-slate-600');
+        isUpdating = false;
+        return;
+      } else {
+        clearValidation();
+        pairInput.classList.remove('border-red-500', 'ring-2', 'ring-red-500/20');
+        pairInput.classList.add('border-slate-600');
+      }
+
+      // Zero-based index calculation
+      const zeroPair = pair - 1;
+
+      // 1. Wire Tip & Ring (25 pair standard cycle)
+      const pairIn25 = zeroPair % 25;
+      const wireTipIdx = Math.floor(pairIn25 / 5);
+      const wireRingIdx = pairIn25 % 5;
+
+      // 2. Binder Tip & Ring (24 binder groups of 25 pairs = 600 pairs per super binder)
+      const binderIdx = Math.floor(zeroPair / 25) % 24;
+      const binderTipIdx = Math.floor(binderIdx / 5);
+      const binderRingIdx = binderIdx % 5;
+
+      // 3. Super Binder (600 pairs per group)
+      const superBinderIdx = Math.floor(zeroPair / 600);
+
+      // Set Dropdown Select Values
+      selectSuperBinder.value = superBinderIdx;
+      selectBinderTip.value = binderTipIdx;
+      selectBinderRing.value = binderRingIdx;
+      selectWireTip.value = wireTipIdx;
+      selectWireRing.value = wireRingIdx;
+
+      renderVisuals();
+      isUpdating = false;
+    }
+
+    // Function 2: Handle Dropdown Change (Calculates Pair Number)
+    function handleDropdownChange() {
+      if (isUpdating) return;
+      isUpdating = true;
+
+      const superBinderIdx = parseInt(selectSuperBinder.value, 10);
+      const binderTipIdx = parseInt(selectBinderTip.value, 10);
+      const binderRingIdx = parseInt(selectBinderRing.value, 10);
+      const wireTipIdx = parseInt(selectWireTip.value, 10);
+      const wireRingIdx = parseInt(selectWireRing.value, 10);
+
+      // Pair inside 25-pair group (1 - 25)
+      const pairIn25 = (wireTipIdx * 5) + wireRingIdx + 1;
+
+      // Binder Index (0 - 23)
+      const binderIndex = (binderTipIdx * 5) + binderRingIdx;
+
+      // Calculated Total Pair Number
+      const calculatedPair = (superBinderIdx * 600) + (binderIndex * 25) + pairIn25;
+
+      // Set calculated pair number to input
+      pairInput.value = calculatedPair;
+
+      clearValidation();
+      pairInput.classList.remove('border-red-500', 'ring-2', 'ring-red-500/20');
+      pairInput.classList.add('border-slate-600');
+
+      renderVisuals();
+      isUpdating = false;
+    }
+
+    // Validation Feedback Utilities
+    function showValidation(msg, type) {
+      validationFeedback.classList.remove('hidden');
+      validationText.textContent = msg;
+      if (type === "error") {
+        validationFeedback.className = "mt-2 text-xs font-medium flex items-center gap-1.5 text-red-400";
+        validationIcon.className = "fa-solid fa-circle-exclamation";
+      }
+    }
+
+    function clearValidation() {
+      validationFeedback.classList.add('hidden');
+    }
+
+    // Event Listeners
+    pairInput.addEventListener('input', handlePairNumberInput);
+    pairInput.addEventListener('change', handlePairNumberInput);
+
+    selectSuperBinder.addEventListener('change', handleDropdownChange);
+    selectBinderTip.addEventListener('change', handleDropdownChange);
+    selectBinderRing.addEventListener('change', handleDropdownChange);
+    selectWireTip.addEventListener('change', handleDropdownChange);
+    selectWireRing.addEventListener('change', handleDropdownChange);
+
+    // Initial load setup
+    window.addEventListener('DOMContentLoaded', () => {
+      handlePairNumberInput();
+    });
+  </script>
+</body>
+</html>
